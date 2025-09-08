@@ -32,9 +32,9 @@ public class SquareSpawner : MonoBehaviour
             DrawSquare();
         }
 
-        // scaleSize += Mathf.Clamp(Input.mouseScrollDelta.y * 0.1f, -0.5f, 1.5f);
-
+        //Setting the scale to multiply the square by based on mouse scroll. *0.1 to lower the change per scroll
         scaleSize += Input.mouseScrollDelta.y * 0.1f;
+        //Clamping it so it wouldn't go into the negative or get too big
         scaleSize = Mathf.Clamp(scaleSize, 0.2f, 3f);
     }
 

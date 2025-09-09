@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     private float shipSpeed = 2f;
     private int numberOfBombs;
     private float bombSpacing;
+
+    //Bomb offset was used for in class exercise, but journal task uses bombSpacing instead, which is why there will be bits of both in the code. Bomb offset usage will be replaced
     public Vector3 bombOffset;
 
     void Update()

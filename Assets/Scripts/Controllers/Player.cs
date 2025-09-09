@@ -9,12 +9,23 @@ public class Player : MonoBehaviour
     public GameObject bombPrefab;
     public Transform bombsTransform;
 
+    private float shipSpeed = 2f;
+    private int numberOfBombs;
+    private float bombSpacing;
+    public Vector3 bombOffset;
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.B))
         {
-            SpawnBombAtOffset(new Vector3(0, 1));
+            SpawnBombAtOffset(bombOffset);
         }
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            WarpDrive(shipSpeed);
+        }
+
     }
 
    public void SpawnBombAtOffset(Vector3 inOffset)
@@ -32,5 +43,10 @@ public class Player : MonoBehaviour
         }
         GameObject bombPlaced = Instantiate(bombPrefab, transform.position + inOffset, Quaternion.identity);
         Destroy(bombPlaced, 3);
+    }
+
+    public void WarpDrive(float shipSpeed)
+    {
+        transform.position += (enemyTransform.position - transform.position).normalized * shipSpeed;
     }
 }

@@ -36,7 +36,6 @@ public class RowGenerator : MonoBehaviour
         
         if (numberField != null) {
 
-            Debug.Log("Got here");
             textEntered = numberField.text;
             
 

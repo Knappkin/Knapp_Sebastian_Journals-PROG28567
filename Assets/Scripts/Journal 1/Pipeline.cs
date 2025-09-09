@@ -10,7 +10,6 @@ public class Pipeline : MonoBehaviour
     float totalMag;
 
     bool firstDraw;
-    bool isDrawing;
 
     float t;
 
@@ -30,7 +29,7 @@ public class Pipeline : MonoBehaviour
         {
             if (firstDraw == true)
             {
-                Debug.Log("Started Drawing");
+                //Debug.Log("Started Drawing");
                 firstDraw = false;
                 t = Time.deltaTime;
                 currentPos = mousePos;
@@ -41,12 +40,12 @@ public class Pipeline : MonoBehaviour
                 
                 lastPos = currentPos;
                 currentPos = mousePos;
-                Vector2 addedPos = currentPos + lastPos;
+                Vector2 minusPos = currentPos - lastPos;
+    
 
                 Debug.DrawLine(lastPos, currentPos, Color.red);
-                totalMag += Mathf.Sqrt(addedPos.x * addedPos.x + addedPos.y * addedPos.y);
-
-                Debug.Log("We here");
+                totalMag += Mathf.Sqrt(minusPos.x * minusPos.x + minusPos.y * minusPos.y);
+           
 
                 t = Time.deltaTime;
 
@@ -63,6 +62,7 @@ public class Pipeline : MonoBehaviour
     private void StopDrawing()
     {
         Debug.Log(totalMag);
+ 
         totalMag = 0;
         firstDraw = true;
     }

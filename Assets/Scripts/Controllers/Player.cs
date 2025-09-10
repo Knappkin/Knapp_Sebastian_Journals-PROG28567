@@ -10,8 +10,11 @@ public class Player : MonoBehaviour
     public Transform bombsTransform;
 
     private float shipSpeed = 2f;
-    private int numberOfBombs;
-    private float bombSpacing;
+    public float warpDistance;
+    public int numberOfBombs;
+    public float bombSpacing;
+
+    public float cornerDistance;
 
     //Bomb offset was used for in class exercise, but journal task uses bombSpacing instead, which is why there will be bits of both in the code. Bomb offset usage will be replaced
     public Vector3 bombOffset;
@@ -26,6 +29,16 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W))
         {
             WarpDrive(shipSpeed);
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            SpawnBombTrail(bombSpacing, numberOfBombs);
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            SpawnBombOnRandomCorner(cornerDistance);
         }
 
     }
@@ -47,8 +60,43 @@ public class Player : MonoBehaviour
         Destroy(bombPlaced, 3);
     }
 
-    public void WarpDrive(float shipSpeed)
+    public void WarpDrive(float warpDist)
     {
-        transform.position += (enemyTransform.position - transform.position).normalized * shipSpeed;
+        float distToEnemy = (enemyTransform.position - transform.position).magnitude;
+       // transform.position = Mathf.Lerp(0, distToEnemy, warpDist);
+    }
+
+
+    public void SpawnBombTrail(float bombSpacing, int bombCount)
+    {
+        for (int i = 0; i < bombCount; i++)
+        {
+            
+            SpawnBombAtOffset(new Vector3(0, (i+1)*-bombSpacing,0));
+        }
+    }
+
+    public void SpawnBombOnRandomCorner(float spawnDist)
+    {
+        int chosenCorner;
+
+        List<Vector2> corners = new List<Vector2>();
+
+        Vector2 topLeft = new Vector2(-spawnDist, spawnDist);
+        corners.Add(topLeft);
+
+        Vector2 topRight = new Vector2(spawnDist, spawnDist);
+        corners.Add(topRight);
+
+        Vector2 botLeft = new Vector2(-spawnDist, -spawnDist);
+        corners.Add(botLeft);
+
+        Vector2 botRight = new Vector2(spawnDist, -spawnDist);
+        corners.Add(botRight);
+
+    chosenCorner = Random.Range(0, corners.Count);
+
+        SpawnBombAtOffset(corners[chosenCorner]);
+
     }
 }

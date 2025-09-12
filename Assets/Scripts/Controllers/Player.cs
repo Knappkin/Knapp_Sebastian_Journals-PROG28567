@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public Transform bombsTransform;
 
     private float shipSpeed = 2f;
-    public float warpDistance;
+    public float warpValue;
     public int numberOfBombs;
     public float bombSpacing;
 
@@ -26,9 +26,9 @@ public class Player : MonoBehaviour
             SpawnBombAtOffset(bombOffset);
         }
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) && warpValue <= 1)
         {
-            WarpDrive(shipSpeed);
+            WarpDrive(warpValue);
         }
 
         if (Input.GetKeyDown(KeyCode.T))
@@ -62,8 +62,15 @@ public class Player : MonoBehaviour
 
     public void WarpDrive(float warpDist)
     {
-        float distToEnemy = (enemyTransform.position - transform.position).magnitude;
-       // transform.position = Mathf.Lerp(0, distToEnemy, warpDist);
+        float warpDistance = Mathf.Lerp(0, (enemyTransform.position - transform.position).magnitude, warpDist);
+   
+        Vector3 enemyDirection = (enemyTransform.position - transform.position).normalized;
+
+        Vector3 warpPosition = enemyDirection * warpDistance;
+
+        transform.position += warpPosition;
+       
+        // transform.position = Mathf.Lerp(0, distToEnemy, warpDist);
     }
 
 

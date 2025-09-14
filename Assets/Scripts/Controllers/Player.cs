@@ -16,6 +16,8 @@ public class Player : MonoBehaviour
 
     public float cornerDistance;
 
+    public float laserRange;
+
     //Bomb offset was used for in class exercise, but journal task uses bombSpacing instead, which is why there will be bits of both in the code. Bomb offset usage will be replaced
     public Vector3 bombOffset;
 
@@ -40,6 +42,8 @@ public class Player : MonoBehaviour
         {
             SpawnBombOnRandomCorner(cornerDistance);
         }
+
+        DetectAsteroids(laserRange, asteroidTransforms);
 
     }
 
@@ -105,5 +109,32 @@ public class Player : MonoBehaviour
 
         SpawnBombAtOffset(corners[chosenCorner]);
 
+    }
+
+    public void DetectAsteroids(float maxRange, List<Transform> asteroidTforms)
+    {
+        for (int i = 0; i < asteroidTforms.Count; i++)
+        {
+            float distToAsteroid = (asteroidTforms[i].position - transform.position).magnitude;
+            
+            if (distToAsteroid < maxRange)
+            {
+               // Debug.Log(i);
+               Debug.Log(distToAsteroid);
+                
+                Vector2 directionToAsteroid = (asteroidTforms[i].position - transform.position).normalized;
+         
+                Vector2 laserEndPoint = (Vector2)transform.position + directionToAsteroid * 2.5f;
+
+                //Line I think should work
+                Debug.DrawLine(transform.position, laserEndPoint, Color.green);
+                //Line to the direction without multiplying it
+                //Debug.DrawLine(transform.position, directionToAsteroid, Color.red);
+                //Line to the actual positions of the asteroids
+                //Debug.DrawLine(transform.position, asteroidTforms[i].position, Color.blue);
+                //Line of the subtraction
+               // Debug.DrawLine(transform.position, (transform.position- asteroidTforms[i].transform.position), Color.yellow);
+            }
+        }
     }
 }

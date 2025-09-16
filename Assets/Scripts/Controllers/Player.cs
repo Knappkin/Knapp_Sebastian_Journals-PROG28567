@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
             SpawnBombOnRandomCorner(cornerDistance);
         }
 
-        //DetectAsteroids(laserRange, asteroidTransforms);
+        DetectAsteroids(laserRange, asteroidTransforms);
 
     }
 

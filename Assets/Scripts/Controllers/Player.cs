@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
             SpawnBombOnRandomCorner(cornerDistance);
         }
 
-        DetectAsteroids(laserRange, asteroidTransforms);
+        //DetectAsteroids(laserRange, asteroidTransforms);
 
     }
 
@@ -72,9 +72,8 @@ public class Player : MonoBehaviour
 
         Vector3 warpPosition = enemyDirection * warpDistance;
 
-        transform.position += warpPosition;
-       
-        // transform.position = Mathf.Lerp(0, distToEnemy, warpDist);
+        transform.position += warpPosition;    
+
     }
 
 
@@ -93,16 +92,16 @@ public class Player : MonoBehaviour
 
         List<Vector2> corners = new List<Vector2>();
 
-        Vector2 topLeft = new Vector2(-spawnDist, spawnDist);
+        Vector2 topLeft = new Vector2(transform.position.x - spawnDist, transform.position.y + spawnDist);
         corners.Add(topLeft);
 
-        Vector2 topRight = new Vector2(spawnDist, spawnDist);
+        Vector2 topRight = new Vector2(transform.position.x  + spawnDist, transform.position.y + spawnDist);
         corners.Add(topRight);
 
-        Vector2 botLeft = new Vector2(-spawnDist, -spawnDist);
+        Vector2 botLeft = new Vector2(transform.position.x - spawnDist, transform.position.y -spawnDist);
         corners.Add(botLeft);
 
-        Vector2 botRight = new Vector2(spawnDist, -spawnDist);
+        Vector2 botRight = new Vector2(transform.position.x + spawnDist, transform.position.y -spawnDist);
         corners.Add(botRight);
 
     chosenCorner = Random.Range(0, corners.Count);
@@ -119,8 +118,8 @@ public class Player : MonoBehaviour
             
             if (distToAsteroid < maxRange)
             {
-               // Debug.Log(i);
-               Debug.Log(distToAsteroid);
+               
+               //Debug.Log(distToAsteroid);
                 
                 Vector2 directionToAsteroid = (asteroidTforms[i].position - transform.position).normalized;
          
@@ -128,12 +127,12 @@ public class Player : MonoBehaviour
 
                 //Line I think should work
                 Debug.DrawLine(transform.position, laserEndPoint, Color.green);
+
                 //Line to the direction without multiplying it
                 //Debug.DrawLine(transform.position, directionToAsteroid, Color.red);
+
                 //Line to the actual positions of the asteroids
                 //Debug.DrawLine(transform.position, asteroidTforms[i].position, Color.blue);
-                //Line of the subtraction
-               // Debug.DrawLine(transform.position, (transform.position- asteroidTforms[i].transform.position), Color.yellow);
             }
         }
     }

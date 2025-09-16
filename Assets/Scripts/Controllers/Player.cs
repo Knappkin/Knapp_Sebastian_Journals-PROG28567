@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class Player : MonoBehaviour
     public GameObject bombPrefab;
     public Transform bombsTransform;
 
-    private float shipSpeed = 2f;
+    public Vector3 shipVelo;
+    public float shipSpeed;
     public float warpValue;
     public int numberOfBombs;
     public float bombSpacing;
@@ -17,10 +19,19 @@ public class Player : MonoBehaviour
     public float cornerDistance;
 
     public float laserRange;
+    public float maxSpeed;
+    public float accelTime;
+    private float acceleration;
+    [SerializeField] Vector2 direction;
 
     //Bomb offset was used for in class exercise, but journal task uses bombSpacing instead, which is why there will be bits of both in the code. Bomb offset usage will be replaced
     public Vector3 bombOffset;
 
+
+    public void Start()
+    {
+        acceleration = maxSpeed / accelTime;
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.B))
@@ -45,6 +56,7 @@ public class Player : MonoBehaviour
 
         DetectAsteroids(laserRange, asteroidTransforms);
 
+        PlayerMovement();
     }
 
    public void SpawnBombAtOffset(Vector3 inOffset)
@@ -136,4 +148,51 @@ public class Player : MonoBehaviour
             }
         }
     }
+
+    public void PlayerMovement()
+    {
+        direction = Vector2.zero;
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            direction.x -= 1;
+            
+        }
+
+        if (Input.GetKey(KeyCode.RightArrow))
+        {    
+
+            direction.x  += 1;
+        }
+
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+        
+            direction.y += 1;
+        }
+
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+
+            direction.y -= 1;
+        }
+
+        direction = direction.normalized;
+
+
+        if (direction.magnitude != 0)
+        {
+            shipVelo += (Vector3)direction * acceleration * Time.deltaTime;
+        }
+
+        if (direction.magnitude == 0)
+        {
+            shipVelo -= (Vector3)direction * acceleration * Time.deltaTime;
+        }
+        shipVelo.x = Mathf.Clamp(shipVelo.x, -maxSpeed, maxSpeed);
+        shipVelo.y = Mathf.Clamp(shipVelo.y, -maxSpeed, maxSpeed);
+
+
+        transform.position += shipVelo * Time.deltaTime;
+    }
+
 }

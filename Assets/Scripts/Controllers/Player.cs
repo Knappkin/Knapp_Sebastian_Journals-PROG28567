@@ -23,6 +23,16 @@ public class Player : MonoBehaviour
     public float accelTime;
     private float acceleration;
     [SerializeField] Vector2 direction;
+    [SerializeField] private float decelTime;
+    private float decel;
+    private Vector3 decelDirection;
+
+    //Boolean to start timer for testing how long acceleration takes to reach max speed
+    private float accelTestTimer;
+    private bool testingAccel;
+
+    private float decelTestTimer;
+    private bool testingDecel;
 
     //Bomb offset was used for in class exercise, but journal task uses bombSpacing instead, which is why there will be bits of both in the code. Bomb offset usage will be replaced
     public Vector3 bombOffset;
@@ -30,7 +40,7 @@ public class Player : MonoBehaviour
 
     public void Start()
     {
-        acceleration = maxSpeed / accelTime;
+       
     }
     void Update()
     {
@@ -140,20 +150,18 @@ public class Player : MonoBehaviour
                 //Line I think should work
                 Debug.DrawLine(transform.position, laserEndPoint, Color.green);
 
-                //Line to the direction without multiplying it
-                //Debug.DrawLine(transform.position, directionToAsteroid, Color.red);
-
-                //Line to the actual positions of the asteroids
-                //Debug.DrawLine(transform.position, asteroidTforms[i].position, Color.blue);
             }
         }
     }
 
     public void PlayerMovement()
     {
+        acceleration = maxSpeed / accelTime;
+        decel = maxSpeed / decelTime;
         direction = Vector2.zero;
         if (Input.GetKey(KeyCode.LeftArrow))
         {
+            
             direction.x -= 1;
             
         }
@@ -179,20 +187,94 @@ public class Player : MonoBehaviour
         direction = direction.normalized;
 
 
+
+        // TESTING TIME FOR ACCEL/DECEL
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            accelTestTimer = Time.deltaTime;
+            testingAccel = true;
+        }
+
+        if (testingAccel)
+        {
+            accelTestTimer += Time.deltaTime;
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftArrow))
+        {
+            decelTestTimer = Time.deltaTime;
+            testingDecel = true;
+        }
+
+        if (testingDecel)
+        {
+            decelTestTimer += Time.deltaTime;
+        }
+
+
+
+        //COMBINED WAY
         if (direction.magnitude != 0)
         {
             shipVelo += (Vector3)direction * acceleration * Time.deltaTime;
         }
 
-        if (direction.magnitude == 0)
+        else
         {
-            shipVelo -= (Vector3)direction * acceleration * Time.deltaTime;
+            shipVelo -= shipVelo.normalized * decel * Time.deltaTime;
         }
-        shipVelo.x = Mathf.Clamp(shipVelo.x, -maxSpeed, maxSpeed);
-        shipVelo.y = Mathf.Clamp(shipVelo.y, -maxSpeed, maxSpeed);
 
+        //X AND Y WAY
+
+        //if (direction.x != 0)
+        //{
+        //    shipVelo.x += direction.x * acceleration * Time.deltaTime;
+        //}
+        //else
+        //{
+        //    shipVelo.x -= Mathf.Sign(shipVelo.x) * decel * Time.deltaTime;
+
+        //}
+
+        //if (direction.y != 0)
+        //{
+        //    shipVelo.y += direction.y * acceleration * Time.deltaTime;
+        //}
+
+        //else
+        //{
+        //    shipVelo.y -= Mathf.Sign(shipVelo.y) * decel * Time.deltaTime;
+        //}
+
+        //if (shipVelo.x > -0.01 && shipVelo.x < 0.01)
+        //{
+        //    shipVelo.x = 0;
+        //}
+
+        //if (shipVelo.y > -0.01 && shipVelo.y < 0.01)
+        //{
+        //    shipVelo.y = 0;
+        //}
+
+        //shipVelo.x = Mathf.Clamp(shipVelo.x, -maxSpeed, maxSpeed);
+        //shipVelo.y = Mathf.Clamp(shipVelo.y, -maxSpeed, maxSpeed);
+
+        shipVelo = Vector3.ClampMagnitude(shipVelo, maxSpeed);
+
+        if(testingAccel && shipVelo.magnitude == maxSpeed)
+        {
+            Debug.Log(accelTestTimer);
+            testingAccel = false;
+        }
+
+        if (testingDecel && shipVelo.magnitude < 0.01)
+        {
+            Debug.Log(decelTestTimer);
+            testingDecel = false;
+        }
 
         transform.position += shipVelo * Time.deltaTime;
     }
 
+  
 }

@@ -21,14 +21,14 @@ public class Asteroid : MonoBehaviour
     void Update()
     {
         MoveAsteroid();
-        //Debug.DrawLine(transform.position, nextPosition);
+        Debug.DrawLine(transform.position, nextPosition);
     }
 
     private void ChooseNextPosition()
     {
         Vector2 randomDirection;
-        randomDirection.x = Random.Range(-1, 1);
-        randomDirection.y = Random.Range(-1, 1);
+        randomDirection.x = Random.Range(-1f, 1f);
+        randomDirection.y = Random.Range(-1f, 1f);
 
         randomDirection = randomDirection.normalized;
         moveDirection = randomDirection;

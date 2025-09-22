@@ -18,15 +18,7 @@ public class Stars : MonoBehaviour
 
     private void Start()
     {
-        //DrawConstellation();
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.C)) 
-        {
-        StartCoroutine(DrawPoints());
-        }
+        DrawConstellation();
     }
 
     private void DrawConstellation()

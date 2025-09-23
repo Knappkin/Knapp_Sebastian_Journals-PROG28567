@@ -224,6 +224,7 @@ public class Player : MonoBehaviour
             shipVelo -= shipVelo.normalized * decel * Time.deltaTime;
         }
 
+
         //X AND Y WAY
 
         //if (direction.x != 0)
@@ -259,8 +260,11 @@ public class Player : MonoBehaviour
         //shipVelo.x = Mathf.Clamp(shipVelo.x, -maxSpeed, maxSpeed);
         //shipVelo.y = Mathf.Clamp(shipVelo.y, -maxSpeed, maxSpeed);
 
+
+
         shipVelo = Vector3.ClampMagnitude(shipVelo, maxSpeed);
 
+        //TESTING FUNCTIONS
         if(testingAccel && shipVelo.magnitude == maxSpeed)
         {
             Debug.Log(accelTestTimer);
@@ -273,6 +277,7 @@ public class Player : MonoBehaviour
             testingDecel = false;
         }
 
+        //ACTUALLY MOVING THE PLAYER
         transform.position += shipVelo * Time.deltaTime;
     }
 

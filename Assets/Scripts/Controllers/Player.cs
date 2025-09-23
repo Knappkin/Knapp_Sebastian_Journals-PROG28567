@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -37,6 +38,10 @@ public class Player : MonoBehaviour
     //Bomb offset was used for in class exercise, but journal task uses bombSpacing instead, which is why there will be bits of both in the code. Bomb offset usage will be replaced
     public Vector3 bombOffset;
 
+
+    //RADAR VARIABLES
+    [SerializeField] private float radarRadius;
+    [SerializeField] private int radarPointCount;
 
     public void Start()
     {
@@ -281,5 +286,8 @@ public class Player : MonoBehaviour
         transform.position += shipVelo * Time.deltaTime;
     }
 
-  
+private void DrawRadar(float radarRad, int numOfPoints)
+    {
+
+    }
 }

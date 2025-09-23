@@ -21,7 +21,7 @@ public class Asteroid : MonoBehaviour
     void Update()
     {
         MoveAsteroid();
-        Debug.DrawLine(transform.position, nextPosition);
+        //Debug.DrawLine(transform.position, nextPosition);
     }
 
     private void ChooseNextPosition()

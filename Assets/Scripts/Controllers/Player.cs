@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     public Transform enemyTransform;
     public GameObject bombPrefab;
     public Transform bombsTransform;
+    public GameObject powerUpPrefab;
 
     public Vector3 shipVelo;
     public float shipSpeed;
@@ -42,6 +43,7 @@ public class Player : MonoBehaviour
     //RADAR VARIABLES
     [SerializeField] private float radarRadius;
     [SerializeField] private int radarPointCount;
+   
 
     public void Start()
     {
@@ -72,6 +74,8 @@ public class Player : MonoBehaviour
         DetectAsteroids(laserRange, asteroidTransforms);
 
         PlayerMovement();
+
+        DrawRadar(radarRadius, radarPointCount);
     }
 
    public void SpawnBombAtOffset(Vector3 inOffset)
@@ -286,7 +290,51 @@ public class Player : MonoBehaviour
         transform.position += shipVelo * Time.deltaTime;
     }
 
-private void DrawRadar(float radarRad, int numOfPoints)
+    private void DrawRadar(float radarRad, int numOfPoints)
+    {
+
+        Color radarColour;
+        float angleIncrement = 360 / numOfPoints;
+
+        float[] radarAngles = new float[numOfPoints];
+
+        //SETTING COLOUR OF RADAR
+        if ((transform.position - enemyTransform.position).magnitude < radarRad)
+        {
+            radarColour = Color.red;
+        }
+
+        else
+        {
+            radarColour = Color.green;
+        }
+
+        for (int i = 0; i < numOfPoints; i++)
+        {
+            float angleInRad = angleIncrement * i * Mathf.Deg2Rad;
+
+            radarAngles[i] = angleInRad;
+        }
+
+        for (int i = 0; i < numOfPoints; i++)
+        {
+            Vector2 currentPoint = transform.position + new Vector3(Mathf.Cos(radarAngles[i]), Mathf.Sin(radarAngles[i]), 0f) * radarRad;
+
+            Vector2 nextPoint;
+
+            if (i == numOfPoints - 1)
+            {
+                nextPoint = transform.position + new Vector3(Mathf.Cos(radarAngles[0]), Mathf.Sin(radarAngles[0]), 0f) * radarRad;
+            }
+            else {
+                nextPoint = transform.position + new Vector3(Mathf.Cos(radarAngles[i + 1]), Mathf.Sin(radarAngles[i + 1]), 0f) * radarRad;
+            }
+
+            Debug.DrawLine(currentPoint, nextPoint, radarColour);
+        }
+    }
+
+    private void SpawnPowerup()
     {
 
     }

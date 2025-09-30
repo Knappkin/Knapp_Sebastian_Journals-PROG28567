@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public Transform enemyTransform;
     public GameObject bombPrefab;
     public Transform bombsTransform;
-    public GameObject powerUpPrefab;
+    public GameObject powerupPrefab;
 
     public Vector3 shipVelo;
     public float shipSpeed;
@@ -43,11 +43,16 @@ public class Player : MonoBehaviour
     //RADAR VARIABLES
     [SerializeField] private float radarRadius;
     [SerializeField] private int radarPointCount;
+
+    //POWERUP VARIABLES
+    [SerializeField] private int powerupCount;
+    [SerializeField] private float powerupRadius;
+    private List<GameObject> powerupsList;
    
 
     public void Start()
     {
-       
+       powerupsList = new List<GameObject>();
     }
     void Update()
     {
@@ -71,11 +76,18 @@ public class Player : MonoBehaviour
             SpawnBombOnRandomCorner(cornerDistance);
         }
 
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SpawnPowerup(powerupCount);
+        }
+
         DetectAsteroids(laserRange, asteroidTransforms);
 
         PlayerMovement();
 
         DrawRadar(radarRadius, radarPointCount);
+
+        DrawPowerups(powerupCount, powerupRadius);
     }
 
    public void SpawnBombAtOffset(Vector3 inOffset)
@@ -334,8 +346,40 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void SpawnPowerup()
+    private void SpawnPowerup(int count)
     {
+        if (powerupsList.Count != 0)
+        {
+            for (int i = 0;i < powerupsList.Count; i++)
+            {
+                Destroy(powerupsList[i]);
+                powerupsList.RemoveAt(i);
+            }
+        }
 
+        for (int i = 0; i<count; i++)
+        {
+            powerupsList.Add(Instantiate(powerupPrefab));
+        }
+
+    }
+
+    private void DrawPowerups(int count, float radius)
+    {
+        float[] angleList = new float[count];
+        float angleIncrement = 360 / count;
+
+        for (int i = 0; i < count; i++)
+        {
+            angleList[i] = i * angleIncrement * Mathf.Deg2Rad;
+        }
+        if (powerupsList.Count > 0)
+        {
+
+            for (int i = 0; i < count; i++)
+            {
+                powerupsList[i].transform.position = transform.position + new Vector3(Mathf.Cos(angleList[i]), Mathf.Sin(angleList[i]), 0) * radius;
+            }
+        }
     }
 }
